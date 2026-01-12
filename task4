@@ -1,0 +1,83 @@
+using System;
+
+/// <summary>
+/// Menu-driven arithmetic calculator supporting four basic operations with repeat functionality
+/// </summary>
+class Task4
+{
+    static void Main()
+    {
+        string userChoice;
+        // Main loop to keep calculator running
+        while (true)
+        {
+            Console.Clear();
+            Console.WriteLine("===== ARITHMETIC CALCULATOR =====");
+            Console.WriteLine("Select Operation:");
+            Console.WriteLine("A - Addition");
+            Console.WriteLine("S - Subtraction");
+            Console.WriteLine("M - Multiplication");
+            Console.WriteLine("D - Division");
+            Console.Write("\nEnter your choice (A/S/M/D): ");
+            userChoice = Console.ReadLine().Trim().ToUpper();
+
+            // Get validated numbers
+            double num1 = GetNumber("Enter first value: ");
+            double num2 = GetNumber("Enter second value: ");
+
+            // Route operation via switch-case
+            switch (userChoice)
+            {
+                case "A":
+                    Console.WriteLine($"\n{num1} + {num2} = {Add(num1, num2)}");
+                    break;
+                case "S":
+                    Console.WriteLine($"\n{num1} - {num2} = {Subtract(num1, num2)}");
+                    break;
+                case "M":
+                    Console.WriteLine($"\n{num1} * {num2} = {Multiply(num1, num2)}");
+                    break;
+                case "D":
+                    if (num2 == 0)
+                        Console.WriteLine("\nError: Division by zero is not allowed!");
+                    else
+                        Console.WriteLine($"\n{num1} / {num2} = {Divide(num1, num2)}");
+                    break;
+                default:
+                    Console.WriteLine("\nInvalid selection! Please choose a valid operation.");
+                    break;
+            }
+
+            // Check if user wants to continue
+            Console.Write("\nContinue calculations? (Y/N): ");
+            string continueChoice = Console.ReadLine().Trim().ToUpper();
+            if (continueChoice != "Y")
+                break;
+        }
+
+        Console.WriteLine("\nCalculator closed. Thank you!");
+    }
+
+    /// <summary>
+    /// Prompts user and returns a valid double value
+    /// </summary>
+    /// <param name="message">Input prompt</param>
+    /// <returns>Validated number</returns>
+    static double GetNumber(string message)
+    {
+        double result;
+        while (true)
+        {
+            Console.Write(message);
+            if (double.TryParse(Console.ReadLine(), out result))
+                return result;
+            Console.WriteLine("Invalid input - please enter a number!");
+        }
+    }
+
+    // Dedicated arithmetic methods
+    static double Add(double a, double b) => a + b;
+    static double Subtract(double a, double b) => a - b;
+    static double Multiply(double a, double b) => a * b;
+    static double Divide(double a, double b) => a / b;
+}
