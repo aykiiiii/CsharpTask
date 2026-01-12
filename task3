@@ -1,1 +1,37 @@
+using System;
 
+namespace Task3
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Declare and initialize the array
+            int[] numbers = { 3, 7, 12, 19, 21, 25, 30 };
+            
+            // Prompt user for input
+            Console.Write("Enter a number to search for: ");
+            int searchNum = int.Parse(Console.ReadLine());
+            
+            // Flag to check if number was found
+            bool found = false;
+            
+            // For loop to iterate through the array
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                if (numbers[i] == searchNum)
+                {
+                    Console.WriteLine($"Number found at position {i}!");
+                    found = true;
+                    break; // Exit loop immediately upon finding
+                }
+            }
+            
+            // If not found after loop completes
+            if (!found)
+            {
+                Console.WriteLine("Number not found in the list.");
+            }
+        }
+    }
+}
