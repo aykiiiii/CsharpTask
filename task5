@@ -1,0 +1,106 @@
+using System;
+
+class StudentReportCard
+{
+    static void Main()
+    {
+        Console.WriteLine("===== STUDENT REPORT CARD SYSTEM =====");
+
+        // Step 1: Get valid total number of students
+        int totalStudents = GetValidIntegerInput("Enter Total Students : ", 1, int.MaxValue);
+
+        // Multi-dimensional array for marks [student][subject: 0=English, 1=Math, 2=Computer]
+        int[,] marksArray = new int[totalStudents, 3];
+        // Arrays to store associated data
+        string[] namesArray = new string[totalStudents];
+        int[] totalsArray = new int[totalStudents];
+        int[] positionsArray = new int[totalStudents];
+
+        // Step 2: Input student data with loop iteration
+        for (int i = 0; i < totalStudents; i++)
+        {
+            Console.WriteLine("\n****************************************");
+            Console.Write("Enter Student Name : ");
+            namesArray[i] = Console.ReadLine().Trim();
+
+            marksArray[i, 0] = GetValidIntegerInput("Enter English Marks (Out Of 100) : ", 0, 100);
+            marksArray[i, 1] = GetValidIntegerInput("Enter Math Marks (Out Of 100) : ", 0, 100);
+            marksArray[i, 2] = GetValidIntegerInput("Enter Computer Marks (Out Of 100) : ", 0, 100);
+
+            // Calculate total marks
+            totalsArray[i] = marksArray[i, 0] + marksArray[i, 1] + marksArray[i, 2];
+        }
+
+        // Step 3: Implement sorting logic (descending order of totals)
+        // Create index array to track original positions after sorting
+        int[] sortedIndices = new int[totalStudents];
+        for (int i = 0; i < totalStudents; i++)
+        {
+            sortedIndices[i] = i;
+        }
+
+        // Bubble sort implementation for descending order
+        for (int i = 0; i < totalStudents - 1; i++)
+        {
+            for (int j = 0; j < totalStudents - i - 1; j++)
+            {
+                if (totalsArray[sortedIndices[j]] < totalsArray[sortedIndices[j + 1]])
+                {
+                    // Swap indices
+                    int temp = sortedIndices[j];
+                    sortedIndices[j] = sortedIndices[j + 1];
+                    sortedIndices[j + 1] = temp;
+                }
+            }
+        }
+
+        // Step 4: Assign positions based on sorted totals
+        for (int i = 0; i < totalStudents; i++)
+        {
+            positionsArray[sortedIndices[i]] = i + 1;
+            // Handle ties (same total gets same position)
+            if (i > 0 && totalsArray[sortedIndices[i]] == totalsArray[sortedIndices[i - 1]])
+            {
+                positionsArray[sortedIndices[i]] = positionsArray[sortedIndices[i - 1]];
+            }
+        }
+
+        // Step 5: Display formatted report
+        Console.WriteLine("\n********************************Report Card********************************");
+        Console.WriteLine("*************************************************************************");
+        foreach (int index in sortedIndices)
+        {
+            Console.WriteLine($"Student Name: {namesArray[index]}, Position: {positionsArray[index]}, Total: {totalsArray[index]}/300");
+            Console.WriteLine("*************************************************************************");
+        }
+    }
+
+    /// <summary>
+    /// Validates and returns integer input within specified range
+    /// </summary>
+    /// <param name="prompt">Input message</param>
+    /// <param name="min">Minimum allowed value</param>
+    /// <param name="max">Maximum allowed value</param>
+    /// <returns>Valid integer</returns>
+    static int GetValidIntegerInput(string prompt, int min, int max)
+    {
+        int inputValue;
+        while (true)
+        {
+            Console.Write(prompt);
+            string input = Console.ReadLine();
+            if (int.TryParse(input, out inputValue))
+            {
+                if (inputValue >= min && inputValue <= max)
+                {
+                    return inputValue;
+                }
+                Console.WriteLine($"Error: Value must be between {min} and {max}.");
+            }
+            else
+            {
+                Console.WriteLine("Error: Please enter a valid whole number.");
+            }
+        }
+    }
+}
